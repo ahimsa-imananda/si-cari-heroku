@@ -1,0 +1,5 @@
+pandas==1.2.5
+streamlit==0.84.0
+tensorflow==2.5.0
+nltk==3.6.2
+numpy==1.19.5
