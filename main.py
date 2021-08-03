@@ -92,5 +92,11 @@ if st.button('Submit'):
 		st.write('Confident: ' + str(confident) + " %")
 	else:
 		confident = predictions[0][0] * 100
+		confident = int(confident)
 		st.warning("SI-CARI tidak yakin ini Berita ASLI atau PALSU")
 		st.write('Confident: ' + str(confident) + " %")
+
+st.subheader('Hasil deteksi berita oleh SI-CARI bukan berarti suatu hal yang PASTI')
+st.write('Gunakan Hasil tersebut sebagai bahan pertimbangan Anda dalam menentukan keaslian suatu berita')
+st.write('Teliti kembali judul, teks berita, dan sumber berita sebelum menentukan kebenaran berita!')
+st.write('Tanyakan juga pendapat orang-orang terdekat Anda tentang keaslian berita yang Anda temui!')
