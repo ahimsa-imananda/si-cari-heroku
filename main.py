@@ -1,26 +1,9 @@
 import pandas as pd
 import streamlit as st
-import numpy as np
 import time
 import pickle
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from collections import defaultdict
-from nltk.corpus import wordnet as wn
 import tensorflow as tf
 from keras.preprocessing.sequence import pad_sequences
-
-def translate_input(title, text):
-	#translator =  Translator()
-	#english_title = translator.translate(title, dest = 'en')
-	#english_text = translator.translate(text, dest = 'en')
-
-	#english_title_value = english_title.text
-	#english_text_value = english_text.text
-
-	return title, text
 
 def preprocessing(df, tokenizer):
 	# To Lower Case
