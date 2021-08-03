@@ -1,4 +1,4 @@
 pandas==1.2.5
 streamlit==0.84.0
-tensorflow==1.15
+tensorflow-cpu
 numpy==1.19.5
