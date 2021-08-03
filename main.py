@@ -5,6 +5,16 @@ import pickle
 import tensorflow as tf
 from keras.preprocessing.sequence import pad_sequences
 
+def translate_input(title, text):
+	#translator =  Translator()
+	#english_title = translator.translate(title, dest = 'en')
+	#english_text = translator.translate(text, dest = 'en')
+
+	#english_title_value = english_title.text
+	#english_text_value = english_text.text
+
+	return title, text
+
 def preprocessing(df, tokenizer):
 	# To Lower Case
     df = to_lower_case(df)
