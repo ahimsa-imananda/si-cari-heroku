@@ -2,3 +2,4 @@ pandas==1.2.5
 streamlit==0.84.0
 tensorflow-cpu
 numpy==1.19.5
+nltk==3.6.2

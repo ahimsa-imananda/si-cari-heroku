@@ -4,6 +4,13 @@ import time
 import pickle
 import tensorflow as tf
 from keras.preprocessing.sequence import pad_sequences
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet as wn
+from collections import defaultdict
 
 def translate_input(title, text):
 	#translator =  Translator()
@@ -17,15 +24,45 @@ def translate_input(title, text):
 
 def preprocessing(df, tokenizer):
 	# To Lower Case
-    df = to_lower_case(df)
+	df = to_lower_case(df)
+	# Remove Header
+	df = remove_header(df)
     # Stemming and Remove Stopwords
-    #df = stemming_remove_stopwords(df)
+	df = stemming_remove_stopwords(df)
     #tokenize pad sequence
-    X = tokenize_pad_sequence(tokenizer, df)
-    return X
+	X = tokenize_pad_sequence(tokenizer, df)
+	return X
 
 def to_lower_case(df):
 	df["title_text"] = [entry.lower() for entry in df["title_text"]]
+	return df
+
+def remove_header(df):
+	for i,body in df.title_text.items():
+		if '(reuters)' in body.lower():
+			idx = body.lower().index('(reuters)') + len('(reuters) - ')
+			df.title_text.iloc[i] = body[idx:]
+	return df
+
+def stemming_remove_stopwords(df):
+	arr = []
+	for entry in df['title_text']:
+		words = nltk.word_tokenize(entry)
+		new_words = [word for word in words if word.isalnum()]
+		arr.append(new_words)
+	df['title_text'] = arr
+	tag_map = defaultdict(lambda : wn.NOUN)
+	tag_map['J'] = wn.ADJ
+	tag_map['V'] = wn.VERB
+	tag_map['R'] = wn.ADV
+	for index, entry in enumerate(df['title_text']):
+		final_sentence = ""
+		word_Lemmatized = WordNetLemmatizer()
+		for word, tag in pos_tag(entry):
+			if word not in stopwords.words('english'):
+				word_Final = word_Lemmatized.lemmatize(word, tag_map[tag[0]])
+				final_sentence = final_sentence + word_Final + " "
+		df.loc[index, 'title_text'] = str(final_sentence)
 	return df
 
 def tokenize_pad_sequence(tokenizer, df):
@@ -43,6 +80,7 @@ def load_stuff():
 
 
 st.title("SI-CARI - Cek Berita Asli atau Palsu!")
+st.set_page_config(page_title='SI-CARI | Home', layout='centered', initial_sidebar_state='auto')
 st.write('')
 st.write("Periksa keaslian suatu berita yang Anda temukan di internet sebelum terperdaya!")
 st.write("Website ini dapat memprediksi berita hoax menggunakan Deep Learning.")
@@ -84,19 +122,17 @@ if st.button('Submit'):
 		confident = predictions[0][0] * 100
 		confident = int(confident)
 		st.error('Berita PALSU')
-		st.write('Confident: ' +  str(confident) + " %")
+		st.subheader("Keterangan: Teks Berita yang Anda masukkan mengandung unsur Hoaks!")
+		st.subheader('Confident: ' +  str(confident) + " %")
 	elif predictions[0][0] < 0.05:
 		confident = 100 - predictions[0][0] * 100
 		confident = int(confident)
 		st.success('Berita ASLI')
-		st.write('Confident: ' + str(confident) + " %")
+		st.subheader("Keterangan: Teks Berita yang Anda masukkan mengandung unsur Hoaks!")
+		st.subheader('Confident: ' + str(confident) + " %")
 	else:
 		confident = predictions[0][0] * 100
 		confident = int(confident)
 		st.warning("SI-CARI tidak yakin ini Berita ASLI atau PALSU")
-		st.write('Confident: ' + str(confident) + " %")
-
-st.subheader('Hasil deteksi berita oleh SI-CARI bukan berarti suatu hal yang PASTI')
-st.write('Gunakan Hasil tersebut sebagai bahan pertimbangan Anda dalam menentukan keaslian suatu berita')
-st.write('Teliti kembali judul, teks berita, dan sumber berita sebelum menentukan kebenaran berita!')
-st.write('Tanyakan juga pendapat orang-orang terdekat Anda tentang keaslian berita yang Anda temui!')
+		st.subheader("Keterangan: Model deep learning tidak yakin dalam memprediksi kandungan Teks Berita Anda")
+		st.subheader('Confident: ' + str(confident) + " %")
