@@ -12,6 +12,8 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from collections import defaultdict
 
+st.set_page_config(page_title='SI-CARI | Home', layout='centered', initial_sidebar_state='auto')
+
 def translate_input(title, text):
 	#translator =  Translator()
 	#english_title = translator.translate(title, dest = 'en')
@@ -78,9 +80,7 @@ def load_stuff():
 		temp_tokenizer = pickle.load(f)
 	return loaded_model, temp_tokenizer
 
-
 st.title("SI-CARI - Cek Berita Asli atau Palsu!")
-st.set_page_config(page_title='SI-CARI | Home', layout='centered', initial_sidebar_state='auto')
 st.write('')
 st.write("Periksa keaslian suatu berita yang Anda temukan di internet sebelum terperdaya!")
 st.write("Website ini dapat memprediksi berita hoax menggunakan Deep Learning.")
