@@ -128,7 +128,7 @@ if st.button('Submit'):
 		confident = 100 - predictions[0][0] * 100
 		confident = int(confident)
 		st.success('Berita ASLI')
-		st.subheader("Keterangan: Teks Berita yang Anda masukkan mengandung unsur Hoaks!")
+		st.subheader("Keterangan: Teks Berita yang Anda masukkan TIDAK mengandung unsur Hoaks!")
 		st.subheader('Confident: ' + str(confident) + " %")
 	else:
 		confident = predictions[0][0] * 100
